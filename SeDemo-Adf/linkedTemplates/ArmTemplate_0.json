@@ -339,6 +339,128 @@
 				"[concat(variables('factoryId'), '/datasets/DS_SE_CSV_dataLoad')]",
 				"[concat(variables('factoryId'), '/datasets/DS_Se_Sqddb_Demo')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Se_DF_Demo')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Se_DF_Demo",
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_SE_CSV_dataLoad",
+								"type": "DatasetReference"
+							},
+							"name": "CollectDatafromCSV"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_Se_Sqddb_Demo",
+								"type": "DatasetReference"
+							},
+							"name": "LoadintoSqlTable",
+							"rejectedDataLinkedService": {
+								"referenceName": "LS_Se_CSV_Demo",
+								"type": "LinkedServiceReference"
+							}
+						}
+					],
+					"transformations": [],
+					"scriptLines": [
+						"source(output(",
+						"          studentId as string,",
+						"          name as string,",
+						"          surname as string,",
+						"          birthdate as string,",
+						"          gender as string,",
+						"          class as string,",
+						"          point as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> CollectDatafromCSV",
+						"CollectDatafromCSV sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          studentId as integer,",
+						"          name as string,",
+						"          surname as string,",
+						"          birthdate as date,",
+						"          gender as string,",
+						"          class as string,",
+						"          point as integer",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     truncate:true,",
+						"     format: 'table',",
+						"     preSQLs:['SET IDENTITY_INSERT  dbo.students ON'],",
+						"     postSQLs:['SET IDENTITY_INSERT  dbo.students OFF'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> LoadintoSqlTable"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_SE_CSV_dataLoad')]",
+				"[concat(variables('factoryId'), '/datasets/DS_Se_Sqddb_Demo')]",
+				"[concat(variables('factoryId'), '/linkedServices/LS_Se_CSV_Demo')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PipelineFor_Se_DF_Demo')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Se_DF_Demo",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Se_DF_Demo",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"CollectDatafromCSV": {},
+									"LoadintoSqlTable": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/Se_DF_Demo')]"
+			]
 		}
 	]
 }
