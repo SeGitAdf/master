@@ -1,0 +1,70 @@
+{
+	"name": "Se_DF_Demo",
+	"properties": {
+		"description": "Se_DF_Demo",
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_SE_CSV_dataLoad",
+						"type": "DatasetReference"
+					},
+					"name": "CollectDatafromCSV"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Se_Sqddb_Demo",
+						"type": "DatasetReference"
+					},
+					"name": "LoadintoSqlTable",
+					"rejectedDataLinkedService": {
+						"referenceName": "LS_Se_CSV_Demo",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          studentId as string,",
+				"          name as string,",
+				"          surname as string,",
+				"          birthdate as string,",
+				"          gender as string,",
+				"          class as string,",
+				"          point as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> CollectDatafromCSV",
+				"CollectDatafromCSV sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          studentId as integer,",
+				"          name as string,",
+				"          surname as string,",
+				"          birthdate as date,",
+				"          gender as string,",
+				"          class as string,",
+				"          point as integer",
+				"     ),",
+				"     deletable:true,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     keys:['studentId'],",
+				"     format: 'table',",
+				"     preSQLs:['Truncate Table dbo.students'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     outputAssertFailedRows: true,",
+				"     assertFailure_container: 'master',",
+				"     assertFailure_folderPath: 'error') ~> LoadintoSqlTable"
+			]
+		}
+	}
+}
