@@ -1,0 +1,47 @@
+{
+	"name": "DS_Se_Sqddb_Demo",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_Se_Sqldb_Demo",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "studentId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "name",
+				"type": "varchar"
+			},
+			{
+				"name": "surname",
+				"type": "varchar"
+			},
+			{
+				"name": "birthdate",
+				"type": "date"
+			},
+			{
+				"name": "gender",
+				"type": "varchar"
+			},
+			{
+				"name": "class",
+				"type": "varchar"
+			},
+			{
+				"name": "point",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "students"
+		}
+	}
+}
