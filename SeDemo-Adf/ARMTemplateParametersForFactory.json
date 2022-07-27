@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "SeDemo-Adf"
+		},
+		"LS_Se_CSV_Demo_connectionString": {
+			"value": ""
+		},
+		"LS_Se_Sqldb_Demo_connectionString": {
+			"value": ""
+		},
+		"SE_AzureDataLakeStorage1_accountKey": {
+			"value": ""
+		},
+		"SE_AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://sqlva367mrjx2nisus.dfs.core.windows.net/"
+		}
+	}
+}
