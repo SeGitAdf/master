@@ -57,6 +57,8 @@
 				"     upsertable:false,",
 				"     truncate:true,",
 				"     format: 'table',",
+				"     preSQLs:['SET IDENTITY_INSERT  dbo.students ON'],",
+				"     postSQLs:['SET IDENTITY_INSERT  dbo.students OFF'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError',",
