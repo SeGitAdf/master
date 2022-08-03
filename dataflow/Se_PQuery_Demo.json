@@ -1,0 +1,20 @@
+{
+	"name": "Se_PQuery_Demo",
+	"properties": {
+		"type": "WranglingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"name": "DS_Se_Sqddb_Demo",
+					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~>  DS_Se_Sqddb_Demo",
+					"dataset": {
+						"referenceName": "DS_Se_Sqddb_Demo",
+						"type": "DatasetReference"
+					}
+				}
+			],
+			"script": "section Section1;\r\nshared DS_Se_Sqddb_Demo = let AdfDoc = Sql.Database(\"se-sql-demo.database.windows.net\", \"SE-SQLDB\", [CreateNavigationProperties = false]), InputTable = AdfDoc{[Schema=\"dbo\",Item=\"students\"]}[Data] in InputTable;\r\nshared UserQuery = let Source = #\"DS_Se_Sqddb_Demo\" in Source;\r\n",
+			"documentLocale": "en-us"
+		}
+	}
+}
