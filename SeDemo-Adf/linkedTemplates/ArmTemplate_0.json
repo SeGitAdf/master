@@ -29,6 +29,30 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Wait1",
+						"type": "Wait",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 5
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/LS_Se_CSV_Demo')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -413,6 +437,31 @@
 				"[concat(variables('factoryId'), '/datasets/DS_SE_CSV_dataLoad')]",
 				"[concat(variables('factoryId'), '/datasets/DS_Se_Sqddb_Demo')]",
 				"[concat(variables('factoryId'), '/linkedServices/LS_Se_CSV_Demo')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Se_PQuery_Demo')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "WranglingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"name": "DS_Se_Sqddb_Demo",
+							"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> DS_Se_Sqddb_Demo",
+							"dataset": {
+								"referenceName": "DS_Se_Sqddb_Demo",
+								"type": "DatasetReference"
+							}
+						}
+					],
+					"script": "section Section1;\r\nshared DS_Se_Sqddb_Demo = let AdfDoc = Sql.Database(\"se-sql-demo.database.windows.net\", \"SE-SQLDB\", [CreateNavigationProperties = false]), InputTable = AdfDoc{[Schema=\"dbo\",Item=\"students\"]}[Data] in InputTable;\r\nshared UserQuery = let Source = #\"DS_Se_Sqddb_Demo\" in Source;\r\n",
+					"documentLocale": "en-us"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_Se_Sqddb_Demo')]"
 			]
 		},
 		{
