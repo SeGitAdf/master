@@ -54,7 +54,7 @@
 				"     batchSize: 10,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> sqldb2",
-				"sqldb join(ERROR_FUNCTION('') == ERROR_FUNCTION(''),",
+				"sqldb, sqldb2 join(ERROR_FUNCTION('') == sqldb2@studentId,",
 				"     joinType:'inner',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
