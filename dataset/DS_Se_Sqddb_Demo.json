@@ -41,7 +41,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "students"
+			"table": "borrows"
 		}
 	}
 }
