@@ -1,0 +1,34 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Se_Sqddb_Demo",
+						"type": "DatasetReference"
+					},
+					"name": "sqldb"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          studentId as integer,",
+				"          name as string,",
+				"          surname as string,",
+				"          birthdate as date,",
+				"          gender as string,",
+				"          class as string,",
+				"          point as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> sqldb"
+			]
+		}
+	}
+}
