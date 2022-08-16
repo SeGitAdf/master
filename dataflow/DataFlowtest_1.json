@@ -1,5 +1,5 @@
 {
-	"name": "dataflow1",
+	"name": "DataFlowtest_1",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -26,6 +26,7 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     batchSize: 10,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> sqldb"
 			]
