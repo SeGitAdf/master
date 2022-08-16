@@ -13,7 +13,11 @@
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "BorrowJoin"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          studentId as integer,",
@@ -28,7 +32,12 @@
 				"     validateSchema: false,",
 				"     batchSize: 10,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> sqldb"
+				"     format: 'table') ~> sqldb",
+				"sqldb join(studentId == ERROR_FUNCTION(''),",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> BorrowJoin"
 			]
 		}
 	}
